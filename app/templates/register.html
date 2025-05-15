@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}
+<div class="mb-md-5 mt-md-4 pb-5">
+    <form action="{{ url_for('main.register') }}" method="POST">
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+
+        <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
+        <p class="text-white-50 mb-5">Create an account</p>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'error' %}
+        <div class="alert alert-error">
+            {{ message }} {# Display only the message text #}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
+        <div class="form-outline form-white mb-4">
+            {{ form.username.label }} {{ form.username(class="form-control form-control-lg", id="username") }}<br>
+            {{ form.password.label }} {{ form.password(class="form-control form-control-lg", id="password") }}
+        </div>
+        <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+    </form>
+</div>
+
+<div>
+    <p class="mb-0">Already have an account? <a href="{{ url_for('main.login') }}"
+                                                class="text-white-50 mb-5 fw-bold">Login</a></p>
+</div>
+{% endblock %}

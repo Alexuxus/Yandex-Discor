@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #root {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .zego-uikit-video {
+            border-radius: 8px; /* Закругленные углы для видео */
+            overflow: hidden;
+        }
+
+        .zego-uikit-video video {
+            object-fit: cover; /* Заполнение контейнера с обрезкой */
+        }
+
+        .user-avatar {
+            width: 40px; /* Размер аватара */
+            height: 40px;
+            border-radius: 50%; /* Круглая форма */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white; /* Белый текст */
+            font-size: 16px; /* Размер шрифта */
+            font-weight: bold;
+            margin-right: 10px; /* Отступ справа */
+        }
+    </style>
+</head>
+
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+<script>
+    window.onload = function () {
+        const roomID = "{{ room_id }}";
+        const userID = "{{ user_id }}";
+        const userName = "{{ username }}";
+        const appID = 1036513686;
+        const serverSecret = "b03817af2836fc9035fa3a76a925dc32";
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+        const friendId = "{{ request.args.get('friend_id') }}";
+
+        const zp = ZegoUIKitPrebuilt.create(kitToken);
+        zp.joinRoom({
+            container: document.querySelector("#root"),
+            sharedLinks: [{
+                name: 'Personal link',
+                url: window.location.protocol + '//' + window.location.host + window.location.pathname + '?roomID=' + roomID,
+            }],
+            scenario: {
+                mode: ZegoUIKitPrebuilt.VideoConference,
+            },
+            lowerLeftAvatarConfig: {
+                showAvatar: true,
+                showSoundWaves: true,
+            },
+            showPreJoinView: false,
+            turnOnMicrophoneWhenJoining: true,
+            turnOnCameraWhenJoining: true,
+            showMyCameraToggleButton: true,
+            showMyMicrophoneToggleButton: true,
+            showAudioVideoSettingsButton: true,
+            showScreenSharingButton: true,
+            showTextChat: false,
+            showUserList: true,
+            maxUsers: 2,
+            layout: "Grid",
+            showLayoutButton: false,
+            onLeaveRoom: () => {
+                // Redireciona para a página de chat após sair da sala
+                window.location.href = "{{ url_for('chat.chat', friend_id=request.args.get('friend_id')) }}";
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
