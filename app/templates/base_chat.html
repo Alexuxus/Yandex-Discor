@@ -68,7 +68,7 @@
                 <li>
                     <a href="{{ url_for('chat.chat', friend_id=friend.user_id) }}">
                       <span class="username-with-avatar">
-                        {{ создать_аватар(friend.username, friend.avatar_color) | safe }}
+                        {{ create_avatar(friend.username, friend.avatar_color) | safe }}
                         {{ friend.username }}
                       </span>
                     </a>
